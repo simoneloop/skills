@@ -14,20 +14,24 @@ Credentials and personal data that must never sit in a public repo:
 | Passwords | `password\s*[=:]`, files literally named `passwords`, `.env`, `*.pkl` cookies |
 | PII | emails, phone numbers, national IDs (e.g. Italian codice fiscale), name/number lists, spreadsheets |
 
-## 2. How to scan
+## 2. How to scan (this skill runs an on-demand audit)
 
-Prefer a dedicated scanner; fall back to grep. Recommended order:
+This skill is invoked by command and performs a **one-time scan** of the target —
+it does NOT install anything. Use the best scanner available; the others are pure
+**fallbacks** for when it isn't installed. `scripts/scan-secrets.sh` already
+applies this exact order automatically.
 
 ```bash
-# BEST for an audit: TruffleHog scans the FULL git history AND verifies whether
-# each secret is still live — so you know what to rotate first.
+# PRIMARY — TruffleHog: scans the FULL git history AND verifies whether each
+# secret is still live, so you know what to rotate first.
 trufflehog git file://<path> --fail --no-update
-# add --only-verified to show only credentials confirmed still active
+# add --only-verified to list only credentials confirmed still active
 
-# Pre-commit / fast pass: Gitleaks (regex; great as a hook that blocks secrets)
+# FALLBACK 1 (only if trufflehog is missing) — Gitleaks: fast regex scan.
 gitleaks detect --source <path> --no-banner --redact
 
-# Fallback when neither is installed: ripgrep / git grep over the working tree
+# FALLBACK 2 (last resort) — ripgrep / git grep over the WORKING TREE only
+# (no history!): use only when neither scanner is installed.
 rg -n -i '(api[_-]?key|secret|token\s*[=:]|password|AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9]{20,}|\b\d{8,10}:[A-Za-z0-9_-]{30,})' <path>
 
 # Hunt a known secret string across ALL commits (history)
@@ -36,11 +40,9 @@ git -C <repo> log -p -S '<secret-substring>' --all
 
 > Why TruffleHog first: a `grep`/working-tree scan misses secrets that live only
 > in old commits (the exact mistake that leaks tokens). TruffleHog walks the whole
-> history; its **verification** (`--only-verified`) tells you which leaked
-> credentials are still active → your rotation priority list.
-
-The bundled `scripts/scan-secrets.sh` prefers `trufflehog`, then `gitleaks`, then
-grep — and always flags suspicious filenames.
+> history; its verification tells you which leaked credentials are still active.
+> Gitleaks/grep exist here only so the scan still works where TruffleHog isn't
+> present — they add no capability over it.
 
 > When reporting findings, **redact the secret values** (show prefix + length),
 > never paste full credentials back into chat.
@@ -76,4 +78,8 @@ git push --force origin master
 
 ## 4. Prevent recurrence
 - Add a `.gitignore` for `.env`, `*.pkl`, key files, data dumps.
-- Suggest enabling GitHub **Secret Scanning** + **Push Protection** on the account.
+- Enable GitHub **Secret Scanning** + **Push Protection** on the account.
+- (Optional, and separate from this on-demand skill) set up a **pre-commit hook**
+  so new secrets are blocked *before* they ever reach history — e.g.
+  `gitleaks protect --staged` or the official `gitleaks` pre-commit hook. This is
+  a one-time setup in the user's own repos, not something this skill performs.
