@@ -28,11 +28,15 @@ PATTERN='(?i)(api[_-]?key|client_secret|secret\s*[=:]|password\s*[=:]|passwd|bea
 
 found=0
 
-if command -v gitleaks >/dev/null 2>&1; then
+if command -v trufflehog >/dev/null 2>&1; then
+  echo "-- trufflehog (full history + credential verification) --"
+  trufflehog git "file://$REPO_DIR" --fail --no-update && echo "trufflehog: clean" || found=1
+  echo "   (tip: re-run with --only-verified to list secrets confirmed still ACTIVE -> rotate those first)"
+elif command -v gitleaks >/dev/null 2>&1; then
   echo "-- gitleaks (full history) --"
   gitleaks detect --source "$REPO_DIR" --no-banner --redact -v && echo "gitleaks: clean" || found=1
 else
-  echo "-- gitleaks not installed; grepping working tree only (history NOT scanned) --"
+  echo "-- no trufflehog/gitleaks installed; grepping working tree only (history NOT scanned) --"
 fi
 
 echo "-- pattern grep (working tree) --"

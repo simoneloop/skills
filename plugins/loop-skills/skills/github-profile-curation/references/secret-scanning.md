@@ -16,21 +16,31 @@ Credentials and personal data that must never sit in a public repo:
 
 ## 2. How to scan
 
-Prefer a dedicated scanner when available; fall back to grep.
+Prefer a dedicated scanner; fall back to grep. Recommended order:
 
 ```bash
-# Best: gitleaks scans the FULL history, not just the working tree
-gitleaks detect --source <path> --no-banner
+# BEST for an audit: TruffleHog scans the FULL git history AND verifies whether
+# each secret is still live — so you know what to rotate first.
+trufflehog git file://<path> --fail --no-update
+# add --only-verified to show only credentials confirmed still active
 
-# Fallback: ripgrep / git grep over the working tree
+# Pre-commit / fast pass: Gitleaks (regex; great as a hook that blocks secrets)
+gitleaks detect --source <path> --no-banner --redact
+
+# Fallback when neither is installed: ripgrep / git grep over the working tree
 rg -n -i '(api[_-]?key|secret|token\s*[=:]|password|AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9]{20,}|\b\d{8,10}:[A-Za-z0-9_-]{30,})' <path>
 
-# Scan history for a known string across all commits
+# Hunt a known secret string across ALL commits (history)
 git -C <repo> log -p -S '<secret-substring>' --all
 ```
 
-The bundled `scripts/scan-secrets.sh` clones (or takes a path) and runs the
-above, preferring `gitleaks` if installed.
+> Why TruffleHog first: a `grep`/working-tree scan misses secrets that live only
+> in old commits (the exact mistake that leaks tokens). TruffleHog walks the whole
+> history; its **verification** (`--only-verified`) tells you which leaked
+> credentials are still active → your rotation priority list.
+
+The bundled `scripts/scan-secrets.sh` prefers `trufflehog`, then `gitleaks`, then
+grep — and always flags suspicious filenames.
 
 > When reporting findings, **redact the secret values** (show prefix + length),
 > never paste full credentials back into chat.
