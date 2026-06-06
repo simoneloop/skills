@@ -5,6 +5,13 @@ trigger-optimized.
 
 ## Add a new skill
 
+0. **Research prior art first (required).** Search the web for existing
+   skills/tools that already do this (Anthropic's `anthropics/skills`, community
+   marketplaces, `awesome-claude-*`, comparable tools). Summarize in your PR: what
+   gaps you fill, what better approach you adopt, and how novel/valuable this is.
+   If a near-duplicate already exists, improve it or link to it instead of adding
+   one. (The `skill-creator` skill does this step for you.) See
+   [SCOPE.md](SCOPE.md).
 1. Create a folder under the plugin:
    `plugins/loop-skills/skills/<kebab-case-name>/SKILL.md`
 2. Frontmatter — `name` + `description` are required:

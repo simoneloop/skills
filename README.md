@@ -12,6 +12,8 @@ This repo is both a **marketplace** (`.claude-plugin/marketplace.json`) and a
 **plugin** (`loop-skills`) bundling reusable skills. The goal: a best-in-class
 home for skills, project setups, and automations I reuse across Claude Code.
 
+📄 **Scope & goals:** [SCOPE.md](SCOPE.md) · **Contributing:** [CONTRIBUTING.md](CONTRIBUTING.md)
+
 ## 🚀 Install
 
 ```text
@@ -56,7 +58,11 @@ _More skills (project setups, automations) will be added here over time._
 │               ├── references/       # loaded on demand
 │               └── scripts/          # executed, not loaded into context
 ├── scripts/validate-skills.sh        # frontmatter / structure linter (used by CI)
-├── .github/workflows/validate.yml    # CI: manifest + skill validation on every push/PR
+├── .github/                          # CI workflow + PR/issue templates
+│   ├── workflows/validate.yml        # manifest + skill validation on every push/PR
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── ISSUE_TEMPLATE/
+├── SCOPE.md                          # mission, in/out of scope, quality bar
 ├── CONTRIBUTING.md
 └── LICENSE
 ```

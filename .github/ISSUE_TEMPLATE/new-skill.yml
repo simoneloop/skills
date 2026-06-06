@@ -38,10 +38,20 @@ body:
         - "none"
     validations:
       required: false
+  - type: textarea
+    id: prior-art
+    attributes:
+      label: Prior art (what already exists?)
+      description: Existing skills/tools that solve this, the gap you'd fill or better approach you'd take, and how novel/valuable it is.
+      placeholder: "Found X and Y; they lack Z. This skill differs by ... ; novelty: medium."
+    validations:
+      required: true
   - type: checkboxes
     id: agreements
     attributes:
       label: Conventions
       options:
         - label: I have read CONTRIBUTING.md and will follow the kebab-case / lean-SKILL.md conventions
+          required: true
+        - label: I researched prior art on the web before proposing this skill
           required: true
