@@ -1,0 +1,41 @@
+name: "🐞 Bug report"
+description: Something in a skill or the tooling doesn't work as expected
+title: "[bug] <short summary>"
+labels: ["bug"]
+body:
+  - type: input
+    id: skill
+    attributes:
+      label: Affected skill / area
+      placeholder: e.g. github-profile-curation, validate.yml, install
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What actually happened?
+      description: Include error messages / logs (redact any secrets).
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: false
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      placeholder: OS, Claude Code version, gh version
+    validations:
+      required: false

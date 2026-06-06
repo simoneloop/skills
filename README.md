@@ -37,6 +37,7 @@ Try locally before publishing changes:
 | Skill | What it does | Invoke |
 |---|---|---|
 | **github-profile-curation** | Audit & modernize a GitHub profile for a target professional positioning: repo inventory, secret/PII scanning, public/private/archive curation, git-history cleanup, and a CV-driven profile README + pins. | `/loop-skills:github-profile-curation` |
+| **skill-creator** | Scaffold a new skill in this repo from the template, with a trigger-optimized description, catalog row, and validation — so contributions pass on the first try. | `/loop-skills:skill-creator` |
 
 _More skills (project setups, automations) will be added here over time._
 

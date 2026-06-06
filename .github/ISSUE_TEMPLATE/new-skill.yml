@@ -1,0 +1,47 @@
+name: "✨ New skill proposal"
+description: Propose a new skill for the loop-skills plugin
+title: "[skill] <kebab-case-name>"
+labels: ["skill", "enhancement"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Skill name (kebab-case)
+      description: Lowercase, hyphens only. Becomes the folder name and `name` frontmatter.
+      placeholder: e.g. reviewing-prs
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What does it do?
+      description: A clear description of the skill's behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: when
+    attributes:
+      label: When should it trigger?
+      description: Concrete situations / user phrases that should activate it (this becomes the `description`).
+      placeholder: "Use when the user wants to ..., asks to ..., or mentions ..."
+    validations:
+      required: true
+  - type: dropdown
+    id: extras
+    attributes:
+      label: Needs supporting files?
+      multiple: true
+      options:
+        - "references/ (long docs)"
+        - "scripts/ (helper code)"
+        - "assets/ (templates/files used in output)"
+        - "none"
+    validations:
+      required: false
+  - type: checkboxes
+    id: agreements
+    attributes:
+      label: Conventions
+      options:
+        - label: I have read CONTRIBUTING.md and will follow the kebab-case / lean-SKILL.md conventions
+          required: true
