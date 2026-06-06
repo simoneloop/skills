@@ -1,0 +1,12 @@
+# Claude Code local settings (machine-specific)
+.claude/settings.local.json
+
+# Scratch / working artifacts (not part of the repo)
+profile-README-draft.md
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

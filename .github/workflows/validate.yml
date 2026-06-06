@@ -1,0 +1,21 @@
+name: validate
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Repo structure & manifest lint
+        run: bash scripts/validate-skills.sh
+
+      - name: Claude Code plugin validate (best-effort)
+        continue-on-error: true
+        run: |
+          npm install -g @anthropic-ai/claude-code >/dev/null 2>&1 || { echo "skip: could not install claude code"; exit 0; }
+          claude plugin validate . || echo "claude plugin validate reported issues (non-blocking)"

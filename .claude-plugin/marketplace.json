@@ -1,0 +1,19 @@
+{
+  "name": "simoneloop-skills",
+  "owner": {
+    "name": "Simone Lopez (simoneloop)"
+  },
+  "description": "Reusable Claude Code skills & automations — GitHub profile curation, project setups, and more.",
+  "metadata": {
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "loop-skills",
+      "source": "loop-skills",
+      "description": "Toolkit of Claude Code skills. Currently: github-profile-curation (repo audit, secret/PII scanning, visibility curation, CV-driven profile positioning).",
+      "keywords": ["github", "skills", "automation", "profile", "security", "secrets"],
+      "category": "productivity"
+    }
+  ]
+}

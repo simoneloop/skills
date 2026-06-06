@@ -1,2 +1,85 @@
-Manage github repo
-Share skills 
+# 🧩 simoneloop / skills
+
+> A curated, installable collection of [Claude Code](https://code.claude.com)
+> **skills & automations** — packaged as a plugin marketplace.
+
+<p>
+  <img src="https://img.shields.io/badge/Claude%20Code-plugin%20marketplace-1C3C3C?style=flat-square&logo=anthropic&logoColor=white" alt="claude code"/>
+  <img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="license"/>
+</p>
+
+This repo is both a **marketplace** (`.claude-plugin/marketplace.json`) and a
+**plugin** (`loop-skills`) bundling reusable skills. The goal: a best-in-class
+home for skills, project setups, and automations I reuse across Claude Code.
+
+## 🚀 Install
+
+```text
+/plugin marketplace add simoneloop/skills
+/plugin install loop-skills@simoneloop-skills
+```
+
+Then invoke a skill (Claude also auto-triggers them from your request):
+
+```text
+/loop-skills:github-profile-curation
+```
+
+Try locally before publishing changes:
+
+```text
+/plugin marketplace add ./        # from the repo root
+/plugin validate .
+```
+
+## 📚 Skill catalog
+
+| Skill | What it does | Invoke |
+|---|---|---|
+| **github-profile-curation** | Audit & modernize a GitHub profile for a target professional positioning: repo inventory, secret/PII scanning, public/private/archive curation, git-history cleanup, and a CV-driven profile README + pins. | `/loop-skills:github-profile-curation` |
+
+_More skills (project setups, automations) will be added here over time._
+
+## 🗂️ Repo layout
+
+```text
+.
+├── .claude-plugin/
+│   └── marketplace.json              # marketplace manifest (name: simoneloop-skills)
+├── plugins/
+│   └── loop-skills/
+│       ├── .claude-plugin/plugin.json
+│       └── skills/
+│           └── github-profile-curation/
+│               ├── SKILL.md          # entry point (lean; progressive disclosure)
+│               ├── references/       # loaded on demand
+│               └── scripts/          # executed, not loaded into context
+├── scripts/validate-skills.sh        # frontmatter / structure linter (used by CI)
+├── .github/workflows/validate.yml    # CI: manifest + skill validation on every push/PR
+├── CONTRIBUTING.md
+└── LICENSE
+```
+
+## 🧭 Conventions (state of the art)
+
+- **One folder per skill**, folder name == skill name, **kebab-case**.
+- `SKILL.md` frontmatter: `name` + `description` required; description states
+  **what it does AND when to use it**, with concrete trigger phrases.
+- Keep `SKILL.md` lean (< 500 lines); push detail to `references/`, code to `scripts/`.
+- **Versioning**: no fixed `version` in the manifests — Claude Code uses the git
+  commit SHA, so every push ships as a new version (no stale-version trap).
+- CI runs structure + manifest validation on every change (see below).
+
+## ✅ Validation
+
+```bash
+# Built-in validator (Claude Code CLI)
+claude plugin validate .
+
+# Repo's own linter (no auth required; also runs in CI)
+bash scripts/validate-skills.sh
+```
+
+## 📄 License
+
+[MIT](LICENSE) © Simone Lopez ([@simoneloop](https://github.com/simoneloop))

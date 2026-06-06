@@ -1,0 +1,132 @@
+---
+name: github-profile-curation
+description: >-
+  Curate and modernize a GitHub profile to target a specific professional
+  positioning (e.g. "AI/ML engineer"). Use when the user wants to clean up their
+  GitHub, audit/triage repositories, decide what to make public/private/archive,
+  scan repos for leaked secrets or PII, scrub secrets from git history, build a
+  profile README from a CV/résumé, choose pinned repos, or "improve how my GitHub
+  looks to recruiters/employers". Covers gh auth, repo inventory, secret/PII
+  scanning, visibility curation, history cleanup, and CV-driven positioning.
+---
+
+# GitHub Profile Curation
+
+Standing guidance for auditing and reshaping a GitHub account so it presents the
+person the way they want to be seen professionally — while never leaking secrets
+or breaking the things their CV points to.
+
+This skill is **generic** (works for any account) but ships with safe defaults.
+Apply the principles below throughout the task; they are not one-time steps.
+
+## Operating principles (read first)
+
+1. **Confirm before anything irreversible or outward-facing.** Changing repo
+   visibility, archiving, deleting, and `push --force` are impactful. Propose a
+   plan, get explicit approval, then execute. Approval for one action is not
+   approval for the next.
+2. **Secrets that were ever public are compromised.** Making a repo private,
+   deleting a file, or rewriting history does **not** un-leak them. The only real
+   remedy is to **rotate/revoke** the credential. Always say this out loud.
+3. **Never hide what the CV/portfolio links to.** Repos referenced from the
+   user's CV, LinkedIn, or live sites must stay public — making them private
+   breaks those links. Detect them in the positioning brief and protect them.
+4. **Scan before you publish.** Before turning any private repo public, inspect
+   it for secrets/PII. Also scan already-public repos — they may already leak.
+5. **Identity hygiene.** Commit with the user's intended identity. Keep personal
+   vs work (employer) identities separate — usually a per-repo local
+   `user.name`/`user.email` rather than changing the global config. Verify which
+   identity a clone will use before committing.
+6. **Match the user's commit conventions. Do NOT add AI co-author trailers**
+   (e.g. `Co-Authored-By: …`) unless the user explicitly asks for them.
+7. **Report faithfully.** If a step is skipped or a tool lacks a scope, say so.
+
+## Prerequisites & environment
+
+- Requires the GitHub CLI (`gh`) authenticated as the **target account**.
+  Check with `gh auth status`. If missing, guide `gh auth login` (interactive —
+  the user runs it). For deletes you need the `delete_repo` scope:
+  `gh auth refresh -h github.com -s delete_repo`.
+- On Windows, `gh` is often not on a fresh shell's PATH even when installed.
+  Use the full path (e.g. `"C:\Program Files\GitHub CLI\gh.exe"`) or reload PATH.
+- Helper scripts ship with this skill under `${CLAUDE_SKILL_DIR}/scripts/`.
+
+## Phase 0 — Preflight
+- Confirm `gh auth status` shows the intended account (warn loudly if it shows a
+  work/org account when the user means their personal one).
+- Establish the **commit identity** for any repo you will commit to.
+
+## Phase 1 — Inventory
+Pull structured metadata for every repo and build a picture:
+```
+gh repo list --limit 200 --json name,description,visibility,isFork,isArchived,\
+primaryLanguage,languages,pushedAt,createdAt,stargazerCount,forkCount,diskUsage,\
+repositoryTopics,homepageUrl
+```
+Or run `${CLAUDE_SKILL_DIR}/scripts/repo-inventory.sh`. Note languages, recency,
+forks, empty repos, and anything that looks personal or low-signal.
+
+## Phase 2 — Positioning brief
+Ask the user for the **target positioning** (the role/identity to project) and
+for their **CV/résumé + links** (LinkedIn, portfolio, live sites). From these:
+- Extract the narrative, key skills, certifications, and flagship projects.
+- **Extract every GitHub URL the CV references** → mark those repos PROTECTED
+  (never private). This is the single most important safety check in the skill.
+
+## Phase 3 — Classify
+Bucket each repo with a one-line rationale and present as a table:
+- **Showcase / pin** — best work that backs the target positioning.
+- **Keep public** — fine to keep, including CV-linked (protected) repos.
+- **Hide → private (+ archive)** — exercises, course work, jokes, noisy forks.
+- **Delete** — empty/throwaway repos.
+- **Leave private** — already-private, keep so.
+
+Get the user's decisions (an `AskUserQuestion` with the ambiguous repos works
+well). Cross-check decisions against the PROTECTED set before executing.
+
+## Phase 4 — Secret & PII scan
+For any repo you plan to make public (and as a spot-check on public repos), scan
+for credentials and personal data **before** changing visibility:
+- Run `${CLAUDE_SKILL_DIR}/scripts/scan-secrets.sh <owner/repo | path>`.
+- See [references/secret-scanning.md](references/secret-scanning.md) for the
+  pattern list, `gitleaks`/`git-filter-repo` usage, and the history-scrub +
+  rotation procedure.
+- If a repo is dirty, do **not** publish it. Report findings (redact the secret
+  values) and propose cleanup.
+
+## Phase 5 — Execute visibility changes (after approval)
+Use `gh`. Order matters and there are gotchas — see
+[references/visibility-curation.md](references/visibility-curation.md):
+- Make private **before** archiving (you cannot edit an archived repo):
+  `gh repo edit OWNER/REPO --visibility private --accept-visibility-change-consequences`
+  then `gh repo archive OWNER/REPO --yes`.
+- Make public: `gh repo edit OWNER/REPO --visibility public --accept-visibility-change-consequences`
+  (only after a clean scan).
+- Delete needs the `delete_repo` scope. If absent, fall back to private and tell
+  the user how to grant the scope.
+
+## Phase 6 — Remediate leaked secrets (if any were found)
+1. **Rotate/revoke first** — the user does this (BotFather `/revoke`, rotate API
+   keys, change passwords). Non-negotiable; do it regardless of repo cleanup.
+2. Replace hardcoded secrets in code with environment variables; delete files
+   that are pure secrets/PII.
+3. Scrub git history (orphan-commit reset or `git filter-repo`) and `push --force`
+   — only with explicit approval. Procedure in
+   [references/secret-scanning.md](references/secret-scanning.md).
+
+## Phase 7 — Profile positioning
+Build the public-facing layer — see
+[references/profile-positioning.md](references/profile-positioning.md):
+- **Profile README**: create the special `USERNAME/USERNAME` repo with a
+  `README.md` derived from the CV (headline, bio, skills, featured projects,
+  live links). Show a draft before publishing.
+- **Pinned repos**: recommend the 6 that best match the positioning (pinning has
+  no API — the user does it in the GitHub UI).
+- **Descriptions & topics**: fill in missing ones on showcased repos.
+- Use **reliable badges** (shields.io). Avoid depending on the shared
+  `github-readme-stats` instance — it rate-limits and renders "Error Fetching
+  Resource". For a reliable stats card, self-host it.
+
+## Done
+Summarize what changed (visibility counts, secrets handled, README live) and list
+the user's remaining manual actions (rotate credentials, pin repos, grant scopes).
