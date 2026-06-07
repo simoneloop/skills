@@ -95,4 +95,4 @@ bash scripts/validate-skills.sh
 
 ## 📄 License
 
-[MIT](LICENSE) © Simone Lopez ([@simoneloop](https://github.com/simoneloop))
+[MIT](LICENSE) © Simonpaolo Lopez ([@simoneloop](https://github.com/simoneloop))
