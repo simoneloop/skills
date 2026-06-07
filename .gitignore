@@ -11,3 +11,5 @@ Thumbs.db
 .idea/
 .vscode/
 .history/
+__pycache__/
+*.pyc
