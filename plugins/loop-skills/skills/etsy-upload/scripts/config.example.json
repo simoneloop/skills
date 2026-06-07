@@ -1,0 +1,11 @@
+{
+  "client_id": "YOUR_ETSY_APP_KEYSTRING",
+  "client_secret": "PASTE_SHARED_SECRET_HERE",
+  "redirect_uri": "http://localhost:3003/oauth/callback",
+  "scopes": "listings_r listings_w shops_r transactions_r",
+  "shop_id": null,
+  "default_shipping_profile_id": null,
+  "default_shop_section_id": null,
+  "default_return_policy_id": null,
+  "default_readiness_state_id": null
+}

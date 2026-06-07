@@ -1,0 +1,33 @@
+{
+  "title": "Anello in argento 925 con pietra di luna naturale",
+  "description": "Anello fatto a mano in argento sterling 925 con pietra di luna naturale. Misura regolabile.\n\nDimensioni: pietra circa 8mm.",
+  "price": 45.00,
+  "quantity": 1,
+  "taxonomy_id": 1216,
+  "tags": ["argento", "pietra di luna", "fatto a mano", "anello argento", "boho"],
+  "materials": ["argento 925", "pietra di luna"],
+  "who_made": "i_did",
+  "when_made": "made_to_order",
+  "is_supply": false,
+  "shipping_profile_id": null,
+  "shop_section_id": null,
+  "return_policy_id": null,
+  "image_paths": [
+    "/abs/path/to/photo-1.jpg",
+    "/abs/path/to/photo-2.jpg"
+  ],
+  "video_path": null,
+  "variations": {
+    "property_name": "Size",
+    "options": [
+      {"name": "S", "price": 45.00, "quantity": 1, "sku": "ring-moon-s"},
+      {"name": "M", "price": 45.00, "quantity": 1, "sku": "ring-moon-m"}
+    ]
+  },
+  "translations": {
+    "en": {"title": "Sterling silver 925 ring with natural moonstone", "description": "...", "tags": ["silver ring", "moonstone", "handmade"]},
+    "fr": {"title": "Bague argent 925 avec pierre de lune", "description": "...", "tags": ["bague argent", "pierre de lune"]},
+    "es": {"title": "Anillo plata 925 con piedra luna", "description": "...", "tags": ["anillo plata", "piedra luna"]},
+    "de": {"title": "925 Silberring mit Mondstein", "description": "...", "tags": ["silberring", "mondstein"]}
+  }
+}
