@@ -9,6 +9,7 @@ description: >-
   create, or publish a product / listing / annuncio on Etsy, turn a photo folder
   into an Etsy listing, or "carica questo prodotto su Etsy". Generic and shop-agnostic:
   tone, languages, and copy rules come from a personal shop-profile file.
+allowed-tools: Bash(python3 *), Bash(python *), Bash(py *)
 ---
 
 # Etsy Upload
@@ -44,8 +45,10 @@ to fix anything missing **before** doing real work. Secrets and per-shop data
 live **outside this repo** in a data dir (default `~/.claude/etsy-tools/`,
 override with the `ETSY_TOOLS_DIR` env var) so nothing is ever committed.
 
-- **Tools:** `python3` (stdlib only — no pip installs). Check with
-  `command -v python3`.
+- **Tools:** a Python 3 interpreter, stdlib only (no pip installs). Detect the
+  command — try `python3`, else `python`, else (Windows) `py` — with
+  `command -v python3 || command -v python || command -v py`. Use whichever exists
+  in place of `python3` in the commands below (on Windows it's usually `python`/`py`).
 - **Data dir + config:** `${ETSY_TOOLS_DIR:-~/.claude/etsy-tools}/config.json`
   must exist with `client_id` and `client_secret` (Etsy app keys from
   <https://www.etsy.com/developers/your-apps>). Copy the template:

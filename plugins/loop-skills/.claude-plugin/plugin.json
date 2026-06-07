@@ -1,11 +1,11 @@
 {
   "name": "loop-skills",
-  "description": "Reusable Claude Code skills by simoneloop. Currently: github-profile-curation.",
+  "description": "Reusable Claude Code skills by simoneloop: GitHub profile curation, Etsy listing upload, and a skill scaffolder.",
   "author": {
     "name": "Simone Lopez"
   },
   "homepage": "https://github.com/simoneloop/skills",
   "repository": "https://github.com/simoneloop/skills",
   "license": "MIT",
-  "keywords": ["github", "automation", "skills", "profile", "security"]
+  "keywords": ["github", "automation", "skills", "profile", "security", "etsy", "listings", "skill-creator"]
 }

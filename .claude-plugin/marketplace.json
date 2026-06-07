@@ -8,8 +8,8 @@
     {
       "name": "loop-skills",
       "source": "./plugins/loop-skills",
-      "description": "Toolkit of Claude Code skills. Currently: github-profile-curation (repo audit, secret/PII scanning, visibility curation, CV-driven profile positioning).",
-      "keywords": ["github", "skills", "automation", "profile", "security", "secrets"],
+      "description": "Toolkit of Claude Code skills: github-profile-curation (repo audit, secret/PII scanning, visibility, CV-driven profile), etsy-upload (photo folder -> draft Etsy listing), skill-creator (scaffold new skills).",
+      "keywords": ["github", "skills", "automation", "profile", "security", "secrets", "etsy", "listings"],
       "category": "productivity"
     }
   ]

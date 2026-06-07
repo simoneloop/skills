@@ -62,9 +62,19 @@ The user says something like "add a skill that…", "create a new skill",
    Add `references/` and `scripts/` subfolders only if needed; reference bundled
    files with markdown links and `${CLAUDE_SKILL_DIR}/...`.
 
-5. **Register it in the catalog.** Add a row to the **Skill catalog** table in
-   the repo `README.md`: name, one-line description, and invoke command
-   `/loop-skills:<name>`.
+5. **Update the marketplace listing (always do this at the end).** A new skill must
+   be discoverable:
+   - Add a row to the **Skill catalog** table in `README.md` (name, one-line
+     description, invoke command `/loop-skills:<name>`).
+   - Refresh the plugin's `keywords`/`description` in
+     `plugins/loop-skills/.claude-plugin/plugin.json` **and** the plugin entry in
+     `.claude-plugin/marketplace.json` if the new skill adds a notable capability,
+     so search/discovery reflect it.
+   - Note: in this repo all skills live in the single `loop-skills` plugin, so
+     `marketplace.json` lists **plugins, not skills** — it does NOT get a new entry
+     per skill. Updating the catalog + keywords IS the marketplace update. (Only if
+     you ever split a skill into its own separate plugin would you add a new
+     `plugins[]` entry here.)
 
 6. **Validate** before finishing:
    ```bash
