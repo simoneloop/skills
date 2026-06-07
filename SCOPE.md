@@ -11,6 +11,13 @@ Be the **state of the art** for repositories of this kind: cleanly structured,
 validated in CI, trigger-optimized, well-documented, and easy to contribute to.
 Every addition should raise the bar, not just the count.
 
+## Positioning
+Where comparable tools optimize for **visibility/SEO**, this collection leads with
+**safety**: e.g. `github-profile-curation` does secret/PII scanning, CV-link
+protection, history scrubbing, and credential-rotation guidance — the security
+layer that SEO-style profile optimizers deliberately skip. Prior-art research
+(required for every skill) keeps each addition genuinely differentiated.
+
 ## In scope
 - **Skills** (`SKILL.md`) that encode reusable workflows or know-how.
 - **Automations** (scripts/hooks) that remove repetitive manual work.

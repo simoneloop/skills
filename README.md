@@ -41,6 +41,11 @@ Try locally before publishing changes:
 | **github-profile-curation** | Audit & modernize a GitHub profile for a target professional positioning: repo inventory, secret/PII scanning, public/private/archive curation, git-history cleanup, and a CV-driven profile README + pins. | `/loop-skills:github-profile-curation` |
 | **skill-creator** | Scaffold a new skill in this repo from the template, with a trigger-optimized description, catalog row, and validation — so contributions pass on the first try. | `/loop-skills:skill-creator` |
 
+> **Why `github-profile-curation` is different:** it's **safety-first** — secret/PII
+> scanning, CV-link protection, git-history scrubbing, and credential-rotation
+> guidance — the security layer that SEO/visibility optimizers (e.g.
+> claudegithub.com) deliberately skip.
+
 _More skills (project setups, automations) will be added here over time._
 
 ## 🗂️ Repo layout
