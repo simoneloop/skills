@@ -35,6 +35,11 @@ trigger-optimized.
 - **kebab-case** for skill/plugin/marketplace names (`[a-z0-9-]+`). The validator
   and the Claude.ai marketplace sync reject other casing.
 - **One folder per skill**; folder name == skill name.
+- **Self-contained setup** — if a skill needs a CLI or a credential, it must include
+  a `## Setup (run first)` section that, as its first action, checks prerequisites
+  and guides the user (tokens → `.claude/settings.local.json`, auto-gitignored).
+  Don't make users configure something a *different* skill needs (no plugin-wide
+  token prompts).
 - **No `version`** in `plugin.json` / marketplace entry — we ship by commit SHA so
   every push is a new version. (If you ever add `version`, you must bump it on
   every release or users get no updates, and never set it in both places.)

@@ -51,9 +51,13 @@ Apply the principles below throughout the task; they are not one-time steps.
   Use the full path (e.g. `"C:\Program Files\GitHub CLI\gh.exe"`) or reload PATH.
 - Helper scripts ship with this skill under `${CLAUDE_SKILL_DIR}/scripts/`.
 
-## Phase 0 — Preflight
-- Confirm `gh auth status` shows the intended account (warn loudly if it shows a
-  work/org account when the user means their personal one).
+## Phase 0 — Setup & preflight (run FIRST)
+Don't start the audit until setup passes:
+- `gh` is **installed** and `gh auth status` shows the **intended account** (warn
+  loudly if it shows a work/org account when the user means their personal one).
+  This skill uses `gh`'s OS keyring, so no token in settings is required; if you
+  instead wire the GitHub MCP server, put its token in `.claude/settings.local.json`
+  (auto-gitignored), not the shared `settings.json`.
 - Establish the **commit identity** for any repo you will commit to.
 
 ## Phase 1 — Inventory

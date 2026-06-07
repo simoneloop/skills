@@ -25,6 +25,11 @@ The user says something like "add a skill that…", "create a new skill",
    - The **purpose**: what it does and — crucially — **when it should trigger**
      (the concrete situations/phrases). This drives the `description`.
    - Whether it needs `references/` (long docs) and/or `scripts/` (helper code).
+   - **Prerequisites & secrets** — which CLIs/tools the skill calls (e.g. `gh`,
+     `jq`, `trufflehog`) and which credentials / env-var keys it needs (e.g.
+     `GITHUB_TOKEN`). These drive the skill's own **Setup** section, so it can
+     self-guide its setup on first run. Detect these from the skill's purpose;
+     don't make the user configure things a *different* skill needs.
 
 2. **Research prior art on the web (required).** Before writing anything, search
    the web for existing skills/tools/approaches that solve the same problem —
@@ -49,6 +54,11 @@ The user says something like "add a skill that…", "create a new skill",
      it**, leading with the key use case and naming trigger phrases (this is the
      ONLY discovery signal — be specific, even "pushy").
    - `{{BODY}}` → the standing instructions (keep the whole file < 500 lines).
+   - The **`## Setup (run first)`** section — fill `{{REQUIRED_TOOLS}}`,
+     `{{REQUIRED_KEYS}}`, and `{{ENV_KEY}}` from the prerequisites identified in
+     step 1, so the skill checks its tools/tokens and guides the user (secrets →
+     `.claude/settings.local.json`) **as its first action** on every run. If the
+     skill needs no tools or keys, delete the Setup section.
    Add `references/` and `scripts/` subfolders only if needed; reference bundled
    files with markdown links and `${CLAUDE_SKILL_DIR}/...`.
 

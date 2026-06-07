@@ -15,6 +15,22 @@ description: >-
   ${CLAUDE_SKILL_DIR}/...
 -->
 
+## Setup (run this FIRST, before any other step)
+This skill needs the items below. On invocation, verify each and guide the user to
+fix anything missing **before** doing the skill's real work. If the skill needs
+none of these, delete this whole section.
+
+- **Tools / CLIs:** {{REQUIRED_TOOLS}} — check with `command -v <tool>`; if missing,
+  give the install command for the user's OS (winget / brew / apt).
+- **Credentials / env vars (secrets):** {{REQUIRED_KEYS}} — read from the
+  environment / Claude Code settings. If missing, guide the user to add them to
+  **`.claude/settings.local.json`** (auto-gitignored — NEVER the shared
+  `settings.json`):
+  ```json
+  { "env": { "{{ENV_KEY}}": "<value>" } }
+  ```
+  Then re-check (a new session picks them up). Do not continue until setup passes.
+
 ## When to use
 Describe the concrete situations and user phrases that should trigger this skill.
 
