@@ -1,5 +1,5 @@
 ---
-name: etsy-upload
+name: grand-bazaar
 description: >-
   Create Etsy listings as DRAFTS on the user's own shop from a folder of product
   photos, in one shot: read the photos, infer style/price/category from the shop's

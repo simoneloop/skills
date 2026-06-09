@@ -1,5 +1,5 @@
 ---
-name: github-profile-curation
+name: glow-up
 description: >-
   Curate and modernize a GitHub profile to target a specific professional
   positioning (e.g. "AI/ML engineer"). Use when the user wants to clean up their

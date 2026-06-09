@@ -13,7 +13,7 @@ Every addition should raise the bar, not just the count.
 
 ## Positioning
 Where comparable tools optimize for **visibility/SEO**, this collection leads with
-**safety**: e.g. `github-profile-curation` does secret/PII scanning, CV-link
+**safety**: e.g. `glow-up` does secret/PII scanning, CV-link
 protection, history scrubbing, and credential-rotation guidance — the security
 layer that SEO-style profile optimizers deliberately skip. Prior-art research
 (required for every skill) keeps each addition genuinely differentiated.
@@ -50,7 +50,7 @@ findings to:
 3. **Judge novelty & quality** — understand how rare/valuable the contribution is,
    and whether it's worth adding versus pointing at an existing solution.
 
-The `skill-creator` skill performs this step automatically; contributors should do
+The `the-forge` skill performs this step automatically; contributors should do
 the same and summarize the prior art in their PR.
 
 ## Conventions

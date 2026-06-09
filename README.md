@@ -24,7 +24,7 @@ home for skills, project setups, and automations I reuse across Claude Code.
 Then invoke a skill (Claude also auto-triggers them from your request):
 
 ```text
-/loop-skills:github-profile-curation
+/loop-skills:glow-up
 ```
 
 Try locally before publishing changes:
@@ -38,11 +38,11 @@ Try locally before publishing changes:
 
 | Skill | What it does | Invoke |
 |---|---|---|
-| **skill-creator** | Scaffold a new skill in this repo from the template, with a trigger-optimized description, catalog row, and validation — so contributions pass on the first try. | `/loop-skills:skill-creator` |
-| **github-profile-curation** | Audit & modernize a GitHub profile for a target professional positioning: repo inventory, secret/PII scanning, public/private/archive curation, git-history cleanup, and a CV-driven profile README + pins. | `/loop-skills:github-profile-curation` |
-| **etsy-upload** | Turn a folder of product photos into a **draft** Etsy listing in one shot: infer style/price/category from the shop's existing listings, write SEO copy + tags, optional multilingual translations & variations, create via Etsy Open API v3. Generic & shop-agnostic — voice/languages come from a personal shop-profile file; drafts only, never auto-publishes. | `/loop-skills:etsy-upload` |
+| **the-forge** | Scaffold a new skill in this repo from the template, with a trigger-optimized description, catalog row, and validation — so contributions pass on the first try. | `/loop-skills:the-forge` |
+| **glow-up** | Audit & modernize a GitHub profile for a target professional positioning: repo inventory, secret/PII scanning, public/private/archive curation, git-history cleanup, and a CV-driven profile README + pins. | `/loop-skills:glow-up` |
+| **grand-bazaar** | Turn a folder of product photos into a **draft** Etsy listing in one shot: infer style/price/category from the shop's existing listings, write SEO copy + tags, optional multilingual translations & variations, create via Etsy Open API v3. Generic & shop-agnostic — voice/languages come from a personal shop-profile file; drafts only, never auto-publishes. | `/loop-skills:grand-bazaar` |
 
-> **Why `github-profile-curation` is different:** it's **safety-first** — secret/PII
+> **Why `glow-up` is different:** it's **safety-first** — secret/PII
 > scanning, CV-link protection, git-history scrubbing, and credential-rotation
 > guidance — the security layer that SEO/visibility optimizers (e.g.
 > claudegithub.com) deliberately skip.
@@ -59,7 +59,7 @@ _More skills (project setups, automations) will be added here over time._
 │   └── loop-skills/
 │       ├── .claude-plugin/plugin.json
 │       └── skills/
-│           └── github-profile-curation/
+│           └── glow-up/
 │               ├── SKILL.md          # entry point (lean; progressive disclosure)
 │               ├── references/       # loaded on demand
 │               └── scripts/          # executed, not loaded into context

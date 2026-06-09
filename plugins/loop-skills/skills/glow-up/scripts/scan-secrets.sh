@@ -47,9 +47,13 @@ if $SCANNER -e "$PATTERN" "$REPO_DIR" --glob '!.git' 2>/dev/null | grep -v -E '\
 fi
 
 echo "-- suspicious filenames (PII / secret stores) --"
-find "$REPO_DIR" -path '*/.git' -prune -o -type f \
+suspicious="$(find "$REPO_DIR" -path '*/.git' -prune -o -type f \
   \( -iname 'passwords' -o -iname '*.env' -o -iname '*.pem' -o -iname '*.pkl' \
-     -o -iname '*.xlsx' -o -iname 'cookies*' -o -iname '*cellulari*' \) -print 2>/dev/null && found=1
+     -o -iname '*.xlsx' -o -iname 'cookies*' -o -iname '*cellulari*' \) -print 2>/dev/null)"
+if [ -n "$suspicious" ]; then
+  printf '%s\n' "$suspicious"
+  found=1
+fi
 
 echo
 if [ "$found" -eq 0 ]; then

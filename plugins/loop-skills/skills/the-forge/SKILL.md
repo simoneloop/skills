@@ -1,5 +1,5 @@
 ---
-name: skill-creator
+name: the-forge
 description: >-
   Scaffold a new Claude Code skill in this repository following its conventions.
   Use when the user wants to create or add a new skill, start a SKILL.md, bootstrap
@@ -19,11 +19,22 @@ The user says something like "add a skill that…", "create a new skill",
 
 ## Steps
 
-1. **Clarify the skill.** Ask for (or infer):
-   - A short **kebab-case name** (`[a-z0-9-]+`, gerund form where natural, e.g.
-     `reviewing-prs`). This becomes the folder name AND the `name` frontmatter.
+1. **Clarify the skill.** Ask for (or infer), in this order:
    - The **purpose**: what it does and — crucially — **when it should trigger**
-     (the concrete situations/phrases). This drives the `description`.
+     (the concrete situations/phrases). This drives the `description`. Nail this
+     FIRST — the name is derived from it.
+   - The **name**. From the purpose/goal, **invent 3-5 evocative names** in the
+     spirit of superpowers or special-move names (e.g. `shadow-clone`, `kamehameha`,
+     `falcon-punch`, `mind-meld`) and propose them for the user to pick from. Lean
+     on the skill's domain for the metaphor (cleanup → `spring-clean`/`purge`;
+     search → `all-seeing-eye`; scaffolding → `genesis`). Each candidate MUST still
+     be valid kebab-case (`[a-z0-9-]+`), since it becomes the folder name, the `name`
+     frontmatter, AND the invoke command `/loop-skills:<name>`. Always also offer a
+     plain functional fallback (gerund form, e.g. `reviewing-prs`) for when the user
+     prefers a literal name, and let them request a fresh batch. Because discovery is
+     driven by the `description` (not the name), a fanciful name does NOT hurt
+     auto-triggering — but keep the catalog row's one-line description crystal-clear
+     so the skill stays findable.
    - Whether it needs `references/` (long docs) and/or `scripts/` (helper code).
    - **Prerequisites & secrets** — which CLIs/tools the skill calls (e.g. `gh`,
      `jq`, `trufflehog`) and which credentials / env-var keys it needs (e.g.
@@ -89,7 +100,8 @@ The user says something like "add a skill that…", "create a new skill",
    `/plugin marketplace update`.
 
 ## Conventions to enforce
-- kebab-case names; one folder per skill; folder name == `name`.
+- kebab-case names (fanciful superpower / special-move names encouraged, still
+  `[a-z0-9-]+`); one folder per skill; folder name == `name`.
 - Lean `SKILL.md`; detail in `references/`, code in `scripts/`.
 - No `version` in manifests (ship by commit SHA).
 - See [CONTRIBUTING.md](../../../../CONTRIBUTING.md) for the full contributor flow.

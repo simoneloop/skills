@@ -1,7 +1,7 @@
 """Etsy Open API v3 client (stdlib only).
 
 Loads config + tokens, auto-refreshes the access token, exposes thin helpers
-for the endpoints used by the etsy-upload skill.
+for the endpoints used by the grand-bazaar skill.
 
 Config and tokens live OUTSIDE this repo so secrets are never committed:
 the data dir defaults to ~/.claude/etsy-tools/ and can be overridden with the

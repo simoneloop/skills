@@ -10,7 +10,7 @@ trigger-optimized.
    marketplaces, `awesome-claude-*`, comparable tools). Summarize in your PR: what
    gaps you fill, what better approach you adopt, and how novel/valuable this is.
    If a near-duplicate already exists, improve it or link to it instead of adding
-   one. (The `skill-creator` skill does this step for you.) See
+   one. (The `the-forge` skill does this step for you.) See
    [SCOPE.md](SCOPE.md).
 1. Create a folder under the plugin:
    `plugins/loop-skills/skills/<kebab-case-name>/SKILL.md`

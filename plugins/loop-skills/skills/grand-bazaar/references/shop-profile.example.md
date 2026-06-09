@@ -6,7 +6,7 @@ Copy this file to your data dir and fill it in:
 cp "${CLAUDE_SKILL_DIR}/references/shop-profile.example.md" ~/.claude/etsy-tools/shop-profile.md
 ```
 
-The `etsy-upload` skill reads `${ETSY_TOOLS_DIR:-~/.claude/etsy-tools}/shop-profile.md`
+The `grand-bazaar` skill reads `${ETSY_TOOLS_DIR:-~/.claude/etsy-tools}/shop-profile.md`
 **first** and follows it for every shop-specific decision (brand voice, target
 languages, terminology, price band, materials policy). It lives outside this
 repo so it's never committed. Delete sections that don't apply.

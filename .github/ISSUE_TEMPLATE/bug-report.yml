@@ -7,7 +7,7 @@ body:
     id: skill
     attributes:
       label: Affected skill / area
-      placeholder: e.g. github-profile-curation, validate.yml, install
+      placeholder: e.g. glow-up, validate.yml, install
     validations:
       required: true
   - type: textarea
