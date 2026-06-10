@@ -115,21 +115,22 @@ gh repo edit OWNER/REPO \
 Show the proposed values before running.
 
 ### R5 — Commit
-Use the GitHub API to create/update files without cloning:
-```bash
-# Encode README
-ENCODED=$(printf '%s' "$README_CONTENT" | base64 -w 0)
+Use whatever mechanism is available — pick the first that applies:
 
-# Create (no sha) or update (sha required):
-SHA=$(gh api repos/OWNER/REPO/contents/README.md --jq '.sha' 2>/dev/null || echo "")
+1. **Local clone already exists** — write the file normally, `git add`, `git commit`, `git push`.
+2. **GitHub MCP server wired** — use the MCP `create_or_update_file` tool directly.
+3. **Only `gh` available, no local clone** — use the GitHub Contents API via `gh api`:
+   ```bash
+   ENCODED=$(printf '%s' "$README_CONTENT" | base64 -w 0)
+   SHA=$(gh api repos/OWNER/REPO/contents/README.md --jq '.sha' 2>/dev/null || echo "")
+   gh api repos/OWNER/REPO/contents/README.md \
+     --method PUT \
+     --field message="docs: add README" \
+     --field content="$ENCODED" \
+     ${SHA:+--field sha="$SHA"} \
+     --field branch="main"
+   ```
 
-gh api repos/OWNER/REPO/contents/README.md \
-  --method PUT \
-  --field message="docs: add README" \
-  --field content="$ENCODED" \
-  ${SHA:+--field sha="$SHA"} \
-  --field branch="main"
-```
 Commit message: `docs: add README` (create) or `docs: update README` (update).
 No `Co-Authored-By` trailer unless the user asks.
 
