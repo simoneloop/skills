@@ -8,6 +8,9 @@ description: >-
   profile README from a CV/résumé, choose pinned repos, or "improve how my GitHub
   looks to recruiters/employers". Covers gh auth, repo inventory, secret/PII
   scanning, visibility curation, history cleanup, and CV-driven positioning.
+  Also use when the user wants to polish or improve a SINGLE repository:
+  write or rewrite a README, add description/topics/badges, or make a specific
+  repo look more professional and showcase-ready.
 ---
 
 # GitHub Profile Curation
@@ -50,6 +53,87 @@ Apply the principles below throughout the task; they are not one-time steps.
 - On Windows, `gh` is often not on a fresh shell's PATH even when installed.
   Use the full path (e.g. `"C:\Program Files\GitHub CLI\gh.exe"`) or reload PATH.
 - Helper scripts ship with this skill under `${CLAUDE_SKILL_DIR}/scripts/`.
+
+## Single-repo polish (standalone mode)
+
+Use this mode when the user points at **one specific repo** and wants it to look
+more professional — without running a full profile audit. Triggers: "crea un
+README", "migliora questo repo", "rendilo più accattivante", "write a README for
+this repo", "polish this repo", "add description/topics".
+
+### R0 — Identify the repo
+Resolve `OWNER/REPO` from context (currently open repo, URL the user pasted, or
+ask). Check `gh auth status` matches the owner.
+
+### R1 — Read the repo
+Before writing anything, understand what the repo actually does:
+- `gh api repos/OWNER/REPO/git/trees/HEAD?recursive=1 --jq '.tree[].path'` — file tree
+- Read key source files: `main.*`, `app.*`, `index.*`, notebooks (`.ipynb`), config files
+- Fetch repo metadata: `gh repo view OWNER/REPO --json description,repositoryTopics,homepageUrl,primaryLanguage,languages`
+- Spawn an Explore agent for repos with many files or multiple notebooks — it reads
+  excerpts efficiently and returns a structured summary of what the project does,
+  data sources, models/algorithms, results, and tech stack.
+
+### R2 — Assess gaps
+Check what's missing or weak:
+| Asset | How to check | Action if missing |
+|-------|-------------|-------------------|
+| README | `gh api .../contents/README.md` → 404 = absent | Create from scratch |
+| Description | `gh repo view` → empty string | Propose one-liner |
+| Topics | `repositoryTopics` empty | Suggest 3–6 relevant tags |
+| Homepage URL | `homepageUrl` empty | Fill if live demo/site exists |
+| License | look for `LICENSE` file | Note as missing (don't add without asking) |
+| Badges | README has no shields | Suggest CI, language version, license |
+
+### R3 — Draft README
+Structure the README from actual code content — never fabricate details:
+```
+# Project title  (descriptive, not just the repo slug)
+> One-sentence hook — what it does and why it matters
+
+## Overview / Pipeline  (diagram or short prose)
+## Notebooks / Modules  (table linking each file with a description)
+## Usage / Quickstart   (install + run commands)
+## Features / Key findings  (bullets from actual results)
+## Tech stack
+## Results               (only if you read actual metrics from the code)
+```
+- Show the full draft to the user **before** committing.
+- Derive section names from the project type: ML → Pipeline + Results; API/service →
+  Endpoints + Quickstart; frontend → Screenshots + Setup; library → API reference.
+- Do NOT invent accuracy numbers, benchmark scores, or results you didn't read from
+  the code. Write "see notebook" if the metrics are buried in output cells.
+
+### R4 — Update repo metadata
+After README approval, also update description and topics in one command:
+```bash
+gh repo edit OWNER/REPO \
+  --description "short one-liner (≤120 chars)" \
+  --add-topic topic1 --add-topic topic2 \
+  --homepage "https://..." # only if a real URL exists
+```
+Show the proposed values before running.
+
+### R5 — Commit
+Use the GitHub API to create/update files without cloning:
+```bash
+# Encode README
+ENCODED=$(printf '%s' "$README_CONTENT" | base64 -w 0)
+
+# Create (no sha) or update (sha required):
+SHA=$(gh api repos/OWNER/REPO/contents/README.md --jq '.sha' 2>/dev/null || echo "")
+
+gh api repos/OWNER/REPO/contents/README.md \
+  --method PUT \
+  --field message="docs: add README" \
+  --field content="$ENCODED" \
+  ${SHA:+--field sha="$SHA"} \
+  --field branch="main"
+```
+Commit message: `docs: add README` (create) or `docs: update README` (update).
+No `Co-Authored-By` trailer unless the user asks.
+
+---
 
 ## Phase 0 — Setup & preflight (run FIRST)
 Don't start the audit until setup passes:
