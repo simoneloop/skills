@@ -11,6 +11,10 @@ description: >-
   Also use when the user wants to polish or improve a SINGLE repository:
   write or rewrite a README, add description/topics/badges, or make a specific
   repo look more professional and showcase-ready.
+  Also use for the personal portfolio site (USERNAME.github.io / GitHub Pages):
+  audit or improve it so the user's body of work emerges from the site, propose
+  a featured-projects section synced with the showcase repos, or suggest creating
+  the site when the user has no personal website at all.
 ---
 
 # GitHub Profile Curation
@@ -136,6 +140,62 @@ No `Co-Authored-By` trailer unless the user asks.
 
 ---
 
+## Personal site polish (USERNAME.github.io)
+
+The profile README is a business card; `USERNAME.github.io` is the shop window.
+Run this mode when the user points at their personal site, and **proactively
+propose it** whenever positioning work (single-repo polish, Phase 3, Phase 7)
+reveals that the site is missing, stale, or doesn't show the user's work —
+especially if the user has no other personal website.
+
+### S0 — Detect
+- Does `USERNAME/USERNAME.github.io` exist, and is Pages live?
+  `gh api repos/USERNAME/USERNAME.github.io/pages --jq '{url:.html_url,status:.status}'`
+- Does the user have a site elsewhere? Check the profile `blog` field
+  (`gh api users/USERNAME --jq '.blog'`) and the CV/positioning brief.
+- **No personal website at all → propose creating `USERNAME.github.io`**: free
+  hosting, custom-domain ready, and the natural home for a portfolio. Propose
+  it with a concrete outline — don't build unasked.
+
+### S1 — Audit the site as a portfolio
+Open the live site and the repo source. Judge everything against one question:
+**does the user's body of work emerge from the site?** A visitor should leave
+knowing what the user has *built*, not just who they are.
+
+| Aspect | What to check |
+|--------|---------------|
+| Positioning | Hero/headline matches the target positioning and the profile README |
+| Projects | A featured-projects section exists, mirrors the showcase repos, and links to repo / live demo |
+| Freshness | Copy reflects the current role and stack; last deploy is recent |
+| Completeness | No placeholder pages, dead routes, or "coming soon" stubs |
+| Contact | Email / LinkedIn / GitHub reachable in one click |
+| Mobile | Layout *adapts* on a phone viewport (nav, columns) — not merely shrinks |
+| Meta / SEO | `<title>`, meta description, favicon, Open Graph tags |
+| Link circularity | Profile README → site, site → repos, showcased repos' `--homepage` → site |
+
+### S2 — Propose, don't impose
+Present the findings as a **prioritized recommendation list** (impact vs effort)
+and let the user pick what to do. Typical proposals, in rough priority order:
+1. Add/refresh a featured-projects section fed by the showcase repos (names,
+   one-liners, tech tags, links) — this is what makes the work emerge.
+2. Align the hero copy with the current positioning.
+3. Finish or remove half-built pages.
+4. Add contact links (email, LinkedIn, GitHub).
+5. Fix mobile layout; add meta/SEO basics.
+6. Set `gh repo edit OWNER/REPO --homepage <site-url>` on showcased repos.
+
+### S3 — Execute & verify before deploy
+A Pages repo deploys on push — treat every push as a **production deploy**:
+- Build locally; screenshot key pages at desktop *and* mobile viewports and show
+  the user **before** pushing.
+- Keep the site's existing stack and visual identity — polish, don't rebuild,
+  unless the user explicitly asks for a redesign.
+- Source all content from real repos and the positioning brief — never invent
+  projects, metrics, or roles. Reuse the R-mode and Phase 1 inventory data.
+- Apply R5 commit rules (user's conventions, correct identity, no AI trailers).
+
+---
+
 ## Phase 0 — Setup & preflight (run FIRST)
 Don't start the audit until setup passes:
 - `gh` is **installed** and `gh auth status` shows the **intended account** (warn
@@ -215,6 +275,10 @@ Build the public-facing layer — see
 - Use **reliable badges** (shields.io). Avoid depending on the shared
   `github-readme-stats` instance — it rate-limits and renders "Error Fetching
   Resource". For a reliable stats card, self-host it.
+- **Personal site**: check `USERNAME.github.io` (see *Personal site polish*).
+  If it exists but doesn't showcase the user's work, propose the S1 audit; if
+  the user has no personal site at all, propose creating one. The profile
+  README and the site should tell the same story and link to each other.
 
 ## Done
 Summarize what changed (visibility counts, secrets handled, README live) and list
