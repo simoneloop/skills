@@ -41,6 +41,7 @@ Try locally before publishing changes:
 | **the-forge** | Scaffold a new skill in this repo from the template, with a trigger-optimized description, catalog row, and validation — so contributions pass on the first try. | `/loop-skills:the-forge` |
 | **glow-up** | Audit & modernize a GitHub profile for a target professional positioning: repo inventory, secret/PII scanning, public/private/archive curation, git-history cleanup, and a CV-driven profile README + pins. | `/loop-skills:glow-up` |
 | **grand-bazaar** | Turn a folder of product photos into a **draft** Etsy listing in one shot: infer style/price/category from the shop's existing listings, write SEO copy + tags, optional multilingual translations & variations, create via Etsy Open API v3. Generic & shop-agnostic — voice/languages come from a personal shop-profile file; drafts only, never auto-publishes. | `/loop-skills:grand-bazaar` |
+| **hermes-tweet** | Install and safely operate Hermes Tweet for Hermes Agent X/Twitter workflows: plugin setup, XQUIK_API_KEY configuration, tweet_explore/read/action order, and action gating. | `/loop-skills:hermes-tweet` |
 
 > **Why `glow-up` is different:** it's **safety-first** — secret/PII
 > scanning, CV-link protection, git-history scrubbing, and credential-rotation
