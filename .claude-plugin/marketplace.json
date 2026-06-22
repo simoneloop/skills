@@ -10,8 +10,8 @@
     {
       "name": "loop-skills",
       "source": "./plugins/loop-skills",
-      "description": "Toolkit of Claude Code skills: glow-up (repo audit, secret/PII scanning, visibility, CV-driven profile), grand-bazaar (photo folder -> draft Etsy listing), x-twitter-scraper (Xquik public X/Twitter data workflows), the-forge (scaffold new skills).",
-      "keywords": ["github", "skills", "automation", "profile", "security", "secrets", "etsy", "listings", "x-twitter", "social-data", "mcp"],
+      "description": "Toolkit of Claude Code skills: glow-up (repo audit, secret/PII scanning, visibility, CV-driven profile), grand-bazaar (photo folder -> draft Etsy listing), next-quest (Jira next-task triage via Atlassian MCP), x-twitter-scraper (Xquik public X/Twitter data workflows), the-forge (scaffold new skills).",
+      "keywords": ["github", "skills", "automation", "profile", "security", "secrets", "etsy", "listings", "x-twitter", "social-data", "jira", "atlassian", "mcp", "triage"],
       "category": "productivity"
     }
   ]
