@@ -1,11 +1,11 @@
 {
   "name": "loop-skills",
-  "description": "Reusable Claude Code skills by simoneloop: GitHub profile curation, Etsy listing upload, and a skill scaffolder.",
+  "description": "Reusable Claude Code skills by simoneloop: GitHub profile curation, Etsy listing upload, Jira next-task triage, and a skill scaffolder.",
   "author": {
     "name": "Simonpaolo Lopez"
   },
   "homepage": "https://github.com/simoneloop/skills",
   "repository": "https://github.com/simoneloop/skills",
   "license": "MIT",
-  "keywords": ["github", "automation", "skills", "profile", "security", "etsy", "listings", "scaffold"]
+  "keywords": ["github", "automation", "skills", "profile", "security", "etsy", "listings", "scaffold", "jira", "atlassian", "mcp", "backlog", "triage"]
 }
