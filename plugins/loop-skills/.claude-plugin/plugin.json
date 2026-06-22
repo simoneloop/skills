@@ -1,6 +1,6 @@
 {
   "name": "loop-skills",
-  "description": "Reusable Claude Code skills by simoneloop: GitHub profile curation, Etsy listing upload, Hermes Tweet setup, and a skill scaffolder.",
+  "description": "Reusable Claude Code skills by simoneloop: GitHub profile curation, Etsy listing upload, Hermes Tweet setup, Jira next-task triage, and a skill scaffolder.",
   "author": {
     "name": "Simonpaolo Lopez"
   },
@@ -19,6 +19,11 @@
     "hermes",
     "twitter",
     "social-media",
-    "xquik"
+    "xquik",
+    "jira",
+    "atlassian",
+    "mcp",
+    "backlog",
+    "triage"
   ]
 }

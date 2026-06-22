@@ -10,7 +10,7 @@
     {
       "name": "loop-skills",
       "source": "./plugins/loop-skills",
-      "description": "Toolkit of Claude Code skills: glow-up (repo audit, secret/PII scanning, visibility, CV-driven profile), grand-bazaar (photo folder -> draft Etsy listing), the-forge (scaffold new skills), hermes-tweet (Hermes Agent X/Twitter plugin setup).",
+      "description": "Toolkit of Claude Code skills: glow-up (repo audit, secret/PII scanning, visibility, CV-driven profile), grand-bazaar (photo folder -> draft Etsy listing), hermes-tweet (Hermes Agent X/Twitter plugin setup), next-quest (Jira next-task triage via Atlassian MCP), the-forge (scaffold new skills).",
       "keywords": [
         "github",
         "skills",
@@ -23,7 +23,11 @@
         "hermes",
         "twitter",
         "social-media",
-        "xquik"
+        "xquik",
+        "jira",
+        "atlassian",
+        "mcp",
+        "triage"
       ],
       "category": "productivity"
     }
