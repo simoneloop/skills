@@ -67,8 +67,10 @@ pick for the **current** project, not a raw issue dump.
    JQL (issues assigned to the user that aren't done, highest priority first):
    ```
    project = "<KEY>" AND assignee = currentUser() AND statusCategory != Done
-   ORDER BY priority DESC, created ASC
+   ORDER BY priority DESC, updated DESC
    ```
+   (`updated DESC` keeps recently-touched work near the top — the deterministic
+   base for the "same theme as my WIP" boost in step 5.)
    Request these fields: `summary, status, priority, issuetype, issuelinks,
    description, assignee`. If the user wants the whole team backlog, drop the
    `assignee` clause; if they want ready-to-pick unassigned work too, widen to
@@ -82,15 +84,54 @@ pick for the **current** project, not a raw issue dump.
    - If a linked issue's status isn't in the payload, fetch it with
      `getJiraIssue` only when it's decisive for the pick (avoid over-fetching).
 
-4. **Rank and pick the next task.** Order the *startable* (non-blocked) issues by:
+4. **Bucket by status first — exclude post-development work.** `statusCategory`
+   has only three values, so review/merge states (e.g. **Merge Request, In
+   Review, Code Review, QA, Testing, Verified, Waiting**) fall under the same
+   *indeterminate* bucket as active development. Those are **done developing** —
+   never offer them as "next to develop". Split the issues:
+   - **To-Do** (statusCategory new) and **actively in development** → real
+     *candidates* for the pick.
+   - **Post-development** (name signals review/merge/QA/verify/waiting) → drop
+     from candidates; mention them separately at most ("STVR-154 is in Merge
+     Request — chase the review", not "develop it"). Status *names* vary by
+     workflow, so judge this from the name; when unsure, treat it as a candidate
+     and say why.
+   These post-development issues still count as **theme anchors** in 5.3 (they
+   tell you what thread you're on), just not as the thing to build next.
+
+5. **Rank and pick the next task.** Order the *startable* (non-blocked) candidates by:
    1. Jira **priority** (Highest → Lowest),
    2. then **blocking** issues first (they free up others),
-   3. then oldest `created` as a tiebreaker.
+   3. then **theme affinity to current work-in-progress** (see below),
+   4. then **most recently updated** as the deterministic base/tiebreaker.
    The **next task** is the top of this list. If every issue is blocked, say so
    explicitly and surface the blockers (so the user knows what to chase) rather
    than forcing a pick.
 
-5. **Report.** Lead with the single pick, then the shortlist:
+   **Theme affinity (hybrid).** Recency (step 5.4) is the stable, deterministic
+   base; on top of it, promote candidates that continue what the user is already
+   doing, so the next task stays on the same thread instead of jumping to a
+   months-old ticket:
+   - **Anchor** = the user's *in-progress* issues (statusCategory is neither
+     "new"/To-Do nor Done — e.g. In Progress, In Review, Merge Request).
+   - **Infer the thread** of that anchor. Prefer structured signals when present
+     — shared **epic/parent**, **labels**, or **components**; fall back to
+     **summary/description** similarity when those are empty (common). Among
+     same-priority startable candidates, move the ones on the anchor's thread
+     above unrelated ones.
+   - This step is **model-judged**, so state *why* a task was promoted (e.g.
+     "same Copilot-questions thread as your in-progress STVR-150"). If there are
+     no in-progress issues, skip the boost and rank by recency alone.
+
+   **Finish WIP before starting new.** If the user has an issue *in active
+   development* (not post-development, not To-Do) on the anchor's thread, that
+   issue **is** the next task — continuing it beats opening a fresh ticket and
+   multiplying context switches. Only when there's no active in-development work
+   on the thread does the pick fall to the most thread-coherent **To-Do**
+   candidate. (Post-development issues from step 4 never win this — they're done
+   developing.)
+
+6. **Report.** Lead with the single pick, then the shortlist:
    ```
    ▶ Next: PROJ-142 — "Add OAuth token refresh"  [High · blocks PROJ-150]
      Why: highest startable priority and unblocks PROJ-150.
