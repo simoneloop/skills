@@ -131,18 +131,49 @@ pick for the **current** project, not a raw issue dump.
    candidate. (Post-development issues from step 4 never win this — they're done
    developing.)
 
-6. **Report.** Lead with the single pick, then the shortlist:
-   ```
-   ▶ Next: PROJ-142 — "Add OAuth token refresh"  [High · blocks PROJ-150]
-     Why: highest startable priority and unblocks PROJ-150.
-     <2–3 line summary of the description / acceptance criteria>
+6. **Report as a quest log.** Render the ranking as an RPG-style questline, not
+   prose. The whole thread is **one main questline** in order (every task is
+   "main" — they only differ by position); the **side quests** are the
+   off-thread issues (different theme / stale). Emit it inside a fenced block so
+   the monospace alignment holds. Use coloured **glyphs/emoji** (not ANSI) so it
+   renders everywhere — no libraries.
 
-   Then:
-     2. PROJ-138 — "..."  [High]
-     3. PROJ-151 — "..."  [Medium · blocked by PROJ-149 ⛔ skipped]
+   Glyph legend (keep consistent):
+   - **Priority dot** maps to the instance's priority scheme: 🔴 Highest/High ·
+     🟠 Medium · 🟢 Low/Lowest.
+   - **Node**: `⊙──▶` = the pick ("ORA"/NOW) · `◇` = upcoming steps in order ·
+     `🏁` = finish line (post-development: review/merge/QA).
+   - **State tick**: `☐` To-Do · `▶` in development · `✔` done-developing · `⚠`
+     ambiguous status (e.g. "Pending").
+   - **Progress bar** = closed/total issues on the thread, e.g. `███████▇░░░░`.
+   - Side-quest icons: `⚔` bug · `📦` task/story.
+
+   **Truncate every title to a fixed width** (≈42 cols) so the right-hand
+   priority/state columns line up — long titles otherwise break the map. Always
+   render issue keys as clickable links when the site URL is known. Template:
+
+   ```text
+   ╔══════════════════════════════════════════════════════════╗
+   ║  🗺  QUESTLINE — «<thread name>»                          ║
+   ║  ███████▇░░░░░░░░  <closed>/<total>                       ║
+   ╚══════════════════════════════════════════════════════════╝
+
+   🔴 ⊙──▶ ORA · <KEY-1> · <title, truncated>          ☐
+   │        ↳ <one-line objective / why now>
+   │
+   🟠 ◇ 2 · <KEY-2> · <title, truncated>               ☐
+   🟠 ◇ 3 · <KEY-3> · <title, truncated>               ☐
+   │
+   🏁 review/merge: <KEY> · <KEY> · <KEY>
+
+   ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+   🧭 SIDE QUESTS — off-thread
+      ⚔ <KEY> · <title>                                ⚠ <status>
+      📦 <KEY> · <title>                               ☐ · <note>
    ```
-   Use clickable issue keys/links when the site URL is known. Keep it short —
-   the user wants a decision, not the full board.
+
+   If every issue is blocked, drop the questline and instead list the blockers
+   to chase. Keep it tight — a decision, not the whole board.
 
 ## Notes / gotchas
 - **Strictly read-only.** This skill only fetches, ranks, and reports. Use
