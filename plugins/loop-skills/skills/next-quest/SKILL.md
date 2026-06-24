@@ -102,26 +102,41 @@ pick for the **current** project, not a raw issue dump.
 5. **Rank and pick the next task.** Order the *startable* (non-blocked) candidates by:
    1. Jira **priority** (Highest → Lowest),
    2. then **blocking** issues first (they free up others),
-   3. then **theme affinity to current work-in-progress** (see below),
+   3. then **lowest context-switch cost from the work just done** (see below) —
+      this is the primary differentiator once priority is tied (the common case),
    4. then **most recently updated** as the deterministic base/tiebreaker.
    The **next task** is the top of this list. If every issue is blocked, say so
    explicitly and surface the blockers (so the user knows what to chase) rather
    than forcing a pick.
 
-   **Theme affinity (hybrid).** Recency (step 5.4) is the stable, deterministic
-   base; on top of it, promote candidates that continue what the user is already
-   doing, so the next task stays on the same thread instead of jumping to a
-   months-old ticket:
-   - **Anchor** = the user's *in-progress* issues (statusCategory is neither
-     "new"/To-Do nor Done — e.g. In Progress, In Review, Merge Request).
-   - **Infer the thread** of that anchor. Prefer structured signals when present
-     — shared **epic/parent**, **labels**, or **components**; fall back to
-     **summary/description** similarity when those are empty (common). Among
-     same-priority startable candidates, move the ones on the anchor's thread
-     above unrelated ones.
-   - This step is **model-judged**, so state *why* a task was promoted (e.g.
-     "same Copilot-questions thread as your in-progress STVR-150"). If there are
-     no in-progress issues, skip the boost and rank by recency alone.
+   **Context-switch cost (minimize).** The whole point is to flow from one story
+   to the next with the **least re-orientation**: ideally the next task keeps
+   editing the *same files and layers* the user just touched. Recency (step 5.4)
+   is the deterministic base; on top of it, promote candidates that minimize
+   switch cost:
+   - **Anchor** = the story the user just finished or is on. Prefer the *active
+     branch / latest commits* and any *in-progress* issue (statusCategory neither
+     "new"/To-Do nor Done). The most recently developed story is the strongest
+     anchor — the next pick should sit right next to it in the codebase.
+   - **Estimate switch cost from code overlap, not just topic.** Read each
+     candidate's **technical-details / "in this task"** section and judge how
+     much it reuses what the anchor already touched:
+     - **Lowest cost (promote to the pick)** — *additive* change on the **same
+       files/layers** the anchor changed: extends the same model/struct, adds
+       fields to the same serializer/API response, augments the same FE
+       component. No new subsystem.
+     - **Higher cost (push down)** — needs a **new subsystem or layer** the
+       anchor didn't touch: file upload/ingestion, document parsing, new
+       persistence/state, a separate detection pipeline, new integrations. Same
+       *theme* but different *code* still costs a switch.
+   - Same theme ≠ same code. Two tickets in one epic can have very different
+     switch costs; rank by the **code** they touch, not the topic they share.
+   - This step is **model-judged**, so state *why* a task won on switch cost
+     (e.g. "extends the same question struct + serializer + FE list you just
+     wrote in STVR-152 — purely additive, ~0 switch"). If you can't tell from the
+     descriptions which candidate reuses the anchor's code, briefly inspect the
+     anchor's recent diff (`git log`/`git diff` on the branch) to ground the
+     judgement. If there's no anchor at all, rank by recency alone.
 
    **Finish WIP before starting new.** If the user has an issue *in active
    development* (not post-development, not To-Do) on the anchor's thread, that
