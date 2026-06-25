@@ -63,18 +63,32 @@ pick for the **current** project, not a raw issue dump.
      `getAccessibleAtlassianResources` (use the first/only site, or ask if
      there are several).
 
-2. **Query the project's open issues** with `searchJiraIssuesUsingJql`. Default
-   JQL (issues assigned to the user that aren't done, highest priority first):
-   ```
-   project = "<KEY>" AND assignee = currentUser() AND statusCategory != Done
-   ORDER BY priority DESC, updated DESC
-   ```
-   (`updated DESC` keeps recently-touched work near the top — the deterministic
-   base for the "same theme as my WIP" boost in step 5.)
-   Request these fields: `summary, status, priority, issuetype, issuelinks,
-   description, assignee`. If the user wants the whole team backlog, drop the
-   `assignee` clause; if they want ready-to-pick unassigned work too, widen to
-   `(assignee = currentUser() OR assignee IS EMPTY)`.
+2. **Query the project's issues** with `searchJiraIssuesUsingJql`. Important:
+   the search does **not** return Agile custom fields (`Flagged`, `Sprint`) when
+   you request them by name — so **filter on them with JQL clauses**, don't try
+   to read their values from the payload. Run two queries:
+
+   a. **Candidates** — issues you could actually start now (the pick comes only
+      from here):
+      ```
+      project = "<KEY>" AND assignee = currentUser() AND statusCategory != Done
+      AND Flagged is EMPTY AND sprint in openSprints()
+      ORDER BY priority DESC, updated DESC
+      ```
+   b. **Parked** — open issues excluded above, for the report's context
+      sections (⛔ ON HOLD / 📅 NEXT SPRINT):
+      ```
+      project = "<KEY>" AND assignee = currentUser() AND statusCategory != Done
+      AND (Flagged is not EMPTY OR sprint not in openSprints())
+      ORDER BY updated DESC
+      ```
+   Fields for both: `summary, status, priority, issuetype, issuelinks,
+   description, assignee`. (`updated DESC` is the deterministic base for step 5.)
+   **Fallbacks:** if a clause errors (instance has no Agile board / no `Flagged`)
+   or `openSprints()` returns nothing, drop that predicate, fold everything into
+   one query, and note that the sprint/flag filter was skipped. To widen scope:
+   drop `assignee` for the team backlog, or use `(assignee = currentUser() OR
+   assignee IS EMPTY)` for unassigned-ready work.
 
 3. **Classify blocked vs. blocking** from each issue's `issuelinks`:
    - **Blocked** — has an inward `is blocked by` link to an issue whose status
@@ -98,6 +112,21 @@ pick for the **current** project, not a raw issue dump.
      and say why.
    These post-development issues still count as **theme anchors** in 5.3 (they
    tell you what thread you're on), just not as the thing to build next.
+
+   The query already split off two more kinds that are open but **must not be
+   picked** — they came back in query 2b, never in 2a:
+   - **Flagged / impediment** (`Flagged is not EMPTY`, value "Impediment") —
+     *explicitly on hold*; someone added the flag, usually with a comment saying
+     why (e.g. "tenere da parte, troppo complicata"). Show under "⛔ ON HOLD"
+     and surface the reason from the issue's latest comment.
+   - **Out of the active sprint** (`sprint not in openSprints()` — `future`,
+     backlog, or none) — on a sprint-driven project the next task comes from the
+     **current sprint**, so show these under "📅 NEXT SPRINT / BACKLOG".
+   - An issue that is *both* flagged and out-of-sprint goes under ⛔ ON HOLD (the
+     flag is the stronger signal).
+   - **If query 2a is empty** (active sprint has no startable candidate): say so,
+     then fall back to the most thread-coherent backlog item from 2b — but never
+     silently promote a flagged one.
 
 5. **Rank and pick the next task.** Order the *startable* (non-blocked) candidates by:
    1. Jira **priority** (Highest → Lowest),
@@ -146,6 +175,13 @@ pick for the **current** project, not a raw issue dump.
    candidate. (Post-development issues from step 4 never win this — they're done
    developing.)
 
+   **Sanity-check the winner's comments.** Before committing to the pick, fetch
+   the chosen candidate's latest comments (`getJiraIssue` with `comment`) and
+   read them for a *defer/hold* signal not captured by a formal flag — "tenere
+   da parte", "aspettare", "non ancora", "on hold", "blocked by X". If present,
+   drop it to "⛔ ON HOLD" and move to the next candidate, stating the reason.
+   Only check the top one or two — don't fetch comments for the whole list.
+
 6. **Report as a quest log.** Render the ranking as an RPG-style questline, not
    prose. The whole thread is **one main questline** in order (every task is
    "main" — they only differ by position); the **side quests** are the
@@ -159,7 +195,7 @@ pick for the **current** project, not a raw issue dump.
    - **Node**: `⊙──▶` = the pick ("ORA"/NOW) · `◇` = upcoming steps in order ·
      `🏁` = finish line (post-development: review/merge/QA).
    - **State tick**: `☐` To-Do · `▶` in development · `✔` done-developing · `⚠`
-     ambiguous status (e.g. "Pending").
+     ambiguous status (e.g. "Pending") · `🚩` flagged/on-hold.
    - **Progress bar** = closed/total issues on the thread, e.g. `███████▇░░░░`.
    - Side-quest icons: `⚔` bug · `📦` task/story.
 
@@ -182,10 +218,15 @@ pick for the **current** project, not a raw issue dump.
    🏁 review/merge: <KEY> · <KEY> · <KEY>
 
    ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+   ⛔ ON HOLD — flagged / deferred, not to develop
+      🚩 <KEY> · <title>            « <flag or comment reason> »
+   📅 NEXT SPRINT / BACKLOG — not in the active sprint
+      <KEY> · <title>                                  <sprint name>
    🧭 SIDE QUESTS — off-thread
       ⚔ <KEY> · <title>                                ⚠ <status>
       📦 <KEY> · <title>                               ☐ · <note>
    ```
+   Omit any of the ⛔ / 📅 / 🧭 sections that have no issues.
 
    If every issue is blocked, drop the questline and instead list the blockers
    to chase. Keep it tight — a decision, not the whole board.
@@ -207,3 +248,8 @@ pick for the **current** project, not a raw issue dump.
   `getAccessibleAtlassianResources`; otherwise resolve the cloudId first.
 - Keep the JQL deterministic — the value of this skill over a raw "list my
   issues" is the consistent ranking, so don't improvise the ordering.
+- **`Flagged` / `Sprint` are Agile-board fields** and may not exist on every
+  instance. If a query errors on those clauses/fields, retry without them and
+  note that the impediment/sprint filter was skipped — never let it block the
+  whole run. A flag's value is "Impediment"; its reason lives in the comment the
+  flag generated, not in the field.
