@@ -1,7 +1,7 @@
 # 🧩 simoneloop / skills
 
 > A curated, installable collection of [Claude Code](https://code.claude.com)
-> **skills & automations** — packaged as a plugin marketplace.
+> **skills & automations** - packaged as a plugin marketplace.
 
 <p>
   <img src="https://img.shields.io/badge/Claude%20Code-plugin%20marketplace-1C3C3C?style=flat-square&logo=anthropic&logoColor=white" alt="claude code"/>
@@ -38,14 +38,15 @@ Try locally before publishing changes:
 
 | Skill | What it does | Invoke |
 |---|---|---|
-| **the-forge** | Scaffold a new skill in this repo from the template, with a trigger-optimized description, catalog row, and validation — so contributions pass on the first try. | `/loop-skills:the-forge` |
+| **the-forge** | Scaffold a new skill in this repo from the template, with a trigger-optimized description, catalog row, and validation - so contributions pass on the first try. | `/loop-skills:the-forge` |
 | **glow-up** | Audit & modernize a GitHub profile for a target professional positioning: repo inventory, secret/PII scanning, public/private/archive curation, git-history cleanup, and a CV-driven profile README + pins. | `/loop-skills:glow-up` |
-| **grand-bazaar** | Turn a folder of product photos into a **draft** Etsy listing in one shot: infer style/price/category from the shop's existing listings, write SEO copy + tags, optional multilingual translations & variations, create via Etsy Open API v3. Generic & shop-agnostic — voice/languages come from a personal shop-profile file; drafts only, never auto-publishes. | `/loop-skills:grand-bazaar` |
-| **next-quest** | For the project open in the working dir, pull its Jira issues via the Atlassian MCP, rank by priority while honoring blocker/blocked-by links, and hand back the single next task to develop (plus the ordered shortlist). Read-only triage — "what should I work on next?". Project key comes from a `.jira-project` file in the repo. | `/loop-skills:next-quest` |
+| **grand-bazaar** | Turn a folder of product photos into a **draft** Etsy listing in one shot: infer style/price/category from the shop's existing listings, write SEO copy + tags, optional multilingual translations & variations, create via Etsy Open API v3. Generic & shop-agnostic - voice/languages come from a personal shop-profile file; drafts only, never auto-publishes. | `/loop-skills:grand-bazaar` |
+| **next-quest** | For the project open in the working dir, pull its Jira issues via the Atlassian MCP, rank by priority while honoring blocker/blocked-by links, and hand back the single next task to develop (plus the ordered shortlist). Read-only triage - "what should I work on next?". Project key comes from a `.jira-project` file in the repo. | `/loop-skills:next-quest` |
+| **x-twitter-scraper** | Use Xquik for public X/Twitter data workflows: search posts, inspect profiles, download media, export followers, monitor keywords, wire webhooks, and route MCP/REST calls with credential and approval boundaries. | `/loop-skills:x-twitter-scraper` |
 
-> **Why `glow-up` is different:** it's **safety-first** — secret/PII
+> **Why `glow-up` is different:** it's **safety-first** - secret/PII
 > scanning, CV-link protection, git-history scrubbing, and credential-rotation
-> guidance — the security layer that SEO/visibility optimizers (e.g.
+> guidance - the security layer that SEO/visibility optimizers (e.g.
 > claudegithub.com) deliberately skip.
 
 _More skills (project setups, automations) will be added here over time._
@@ -80,7 +81,7 @@ _More skills (project setups, automations) will be added here over time._
 - `SKILL.md` frontmatter: `name` + `description` required; description states
   **what it does AND when to use it**, with concrete trigger phrases.
 - Keep `SKILL.md` lean (< 500 lines); push detail to `references/`, code to `scripts/`.
-- **Versioning**: no fixed `version` in the manifests — Claude Code uses the git
+- **Versioning**: no fixed `version` in the manifests - Claude Code uses the git
   commit SHA, so every push ships as a new version (no stale-version trap).
 - CI runs structure + manifest validation on every change (see below).
 

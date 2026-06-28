@@ -3,13 +3,15 @@
   "owner": {
     "name": "Simonpaolo Lopez (simoneloop)"
   },
-  "description": "Reusable Claude Code skills & automations — GitHub profile curation, project setups, and more.",
+  "metadata": {
+    "description": "Reusable Claude Code skills and automations for GitHub profile curation, Etsy draft listings, X/Twitter data workflows, project setups, and more."
+  },
   "plugins": [
     {
       "name": "loop-skills",
       "source": "./plugins/loop-skills",
-      "description": "Toolkit of Claude Code skills: glow-up (repo audit, secret/PII scanning, visibility, CV-driven profile), grand-bazaar (photo folder -> draft Etsy listing), next-quest (Jira next-task triage via Atlassian MCP), the-forge (scaffold new skills).",
-      "keywords": ["github", "skills", "automation", "profile", "security", "secrets", "etsy", "listings", "jira", "atlassian", "mcp", "triage"],
+      "description": "Toolkit of Claude Code skills: glow-up (repo audit, secret/PII scanning, visibility, CV-driven profile), grand-bazaar (photo folder -> draft Etsy listing), next-quest (Jira next-task triage via Atlassian MCP), x-twitter-scraper (Xquik public X/Twitter data workflows), the-forge (scaffold new skills).",
+      "keywords": ["github", "skills", "automation", "profile", "security", "secrets", "etsy", "listings", "x-twitter", "social-data", "jira", "atlassian", "mcp", "triage"],
       "category": "productivity"
     }
   ]
